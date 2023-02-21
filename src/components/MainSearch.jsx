@@ -40,7 +40,7 @@ const MainSearch = () => {
           ) : (
             queryState.queryResult.map((jobData) => <Job key={jobData._id} data={jobData} />)
           )}
-          {queryState.hasError && (
+          {queryState.hasError === true && queryState.queryResult.length === 0 && (
             <Alert variant="danger" className="mt-5">
               There was an error due to: {queryState.errorMessage}
             </Alert>
