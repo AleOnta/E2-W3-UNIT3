@@ -1,7 +1,10 @@
-import { ADD_QUERY_RESULT } from "../actions";
+import { ADD_QUERY_RESULT, RETURN_ERROR, SET_LOAD_OFF, SET_LOAD_ON } from "../actions";
 
 const initialState = {
   queryResult: [],
+  isLoading: false,
+  hasError: false,
+  errorMessagge: "",
 };
 
 const searchReducer = (state = initialState, action) => {
@@ -10,6 +13,24 @@ const searchReducer = (state = initialState, action) => {
       return {
         ...state,
         queryResult: action.payload,
+      };
+
+    case SET_LOAD_ON:
+      return {
+        ...state,
+        isLoading: action.payload,
+      };
+    case SET_LOAD_OFF:
+      return {
+        ...state,
+        isLoading: action.payload,
+      };
+
+    case RETURN_ERROR:
+      return {
+        ...state,
+        hasError: true,
+        errorMessagge: action.payload,
       };
     default:
       return state;

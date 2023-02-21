@@ -1,10 +1,28 @@
-// actions for query reducer:
+// actions for search reducer:
 export const ADD_QUERY_RESULT = "ADD_QUERY_RESULT";
+export const SET_LOAD_ON = "SET_LOAD_ON";
+export const SET_LOAD_OFF = "SET_LOAD_OFF";
+export const RETURN_ERROR = "RETURN_ERROR";
+
+// export const setLoadOnAction = () => ({
+//   type: SET_LOAD_ON,
+//   payload: true
+// })
+
+// export const setLoadOffAction = () => ({
+//   type: SET_LOAD_OFF,
+//   payload: false
+// })
 
 export const jobFetcherAction = (e, endpoint, query) => {
   e.preventDefault();
   return async (dispatch) => {
     try {
+      dispatch({
+        type: SET_LOAD_ON,
+        payload: true,
+      });
+
       const response = await fetch(endpoint + query + "&limit=20");
       if (response.ok) {
         const { data } = await response.json();
@@ -14,10 +32,23 @@ export const jobFetcherAction = (e, endpoint, query) => {
           payload: data,
         });
       } else {
-        alert("Error fetching results");
+        dispatch({
+          type: RETURN_ERROR,
+          payload: "response wasn't ok",
+        });
       }
     } catch (error) {
-      console.log(error);
+      dispatch({
+        type: RETURN_ERROR,
+        payload: error.message,
+      });
+    } finally {
+      setTimeout(() => {
+        dispatch({
+          type: SET_LOAD_OFF,
+          payload: false,
+        });
+      }, 1000);
     }
   };
 };
